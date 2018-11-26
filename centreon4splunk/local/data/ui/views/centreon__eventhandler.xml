@@ -1,0 +1,62 @@
+<form>
+  <label>Centreon - EventHandler</label>
+  <fieldset submitButton="true">
+    <input type="text" token="hostname" searchWhenChanged="true">
+      <label>Hostname (requis)</label>
+      <default>*</default>
+    </input>
+    <input type="text" token="service_description" searchWhenChanged="true">
+      <label>Service description</label>
+      <default></default>
+      <prefix>service_description=</prefix>
+    </input>
+    <input type="checkbox" token="state" searchWhenChanged="true">
+      <label>State</label>
+      <choice value="0">OK</choice>
+      <choice value="1">WARNING</choice>
+      <choice value="2">CRITICAL</choice>
+      <choice value="3">UNKNOWN</choice>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>state=</valuePrefix>
+      <delimiter> OR </delimiter>
+      <default>0,1,2,3</default>
+    </input>
+    <input type="radio" token="state_type" searchWhenChanged="true">
+      <label>State Type</label>
+      <choice value="0">SOFT</choice>
+      <choice value="1">HARD</choice>
+      <default>1</default>
+    </input>
+    <input type="radio" token="output" searchWhenChanged="true">
+      <label>Show output</label>
+      <choice value="">no</choice>
+      <choice value=",output">yes</choice>
+      <default></default>
+    </input>
+    <input type="time" token="timepicker" searchWhenChanged="true">
+      <label>Date</label>
+      <default>
+        <earliest>-60m@m</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <table>
+        <title>Resultats</title>
+        <search>
+          <query>index="centreon" category=1 element=6 hostname=$hostname$ state_type=$state_type$ $state$ $service_description$ | eval state=case(state == 0, "OK", state == 1, "WARNING", state == 2, "CRITICAL", state == 3, "UNKNOWN") | dedup _time,hostname,service_description,state,command_line | table _time,hostname,service_description,state,command_line $output$</query>
+          <earliest>$timepicker.earliest$</earliest>
+          <latest>$timepicker.latest$</latest>
+        </search>
+        <option name="count">25</option>
+        <option name="drilldown">none</option>
+        <format type="color" field="state">
+          <colorPalette type="map">{"OK":#A2CC3E,"WARNING":#F7BC38,"CRITICAL":#D93F3C,"UNKNOWN":#555555}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+</form>

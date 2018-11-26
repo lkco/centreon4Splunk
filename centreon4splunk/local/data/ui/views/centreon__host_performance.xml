@@ -1,0 +1,144 @@
+<form>
+  <label>Centreon - Host Performance</label>
+  <fieldset submitButton="true" autoRun="true">
+    <input type="dropdown" token="hostname" searchWhenChanged="true">
+      <label>Enter hostname</label>
+      <fieldForLabel>hostname</fieldForLabel>
+      <fieldForValue>hostname</fieldForValue>
+      <search>
+        <query>index=centreon element=24 category=1 hostname=* service_description=* | dedup hostname | sort hostname</query>
+        <earliest>-15m@m</earliest>
+        <latest>now</latest>
+      </search>
+    </input>
+    <input type="time" token="timepicker" searchWhenChanged="true">
+      <label>Date</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="checkbox" token="state" searchWhenChanged="true">
+      <label>State</label>
+      <choice value="0">OK</choice>
+      <choice value="1">WARNING</choice>
+      <choice value="2">CRITICAL</choice>
+      <choice value="3">UNKNOWN</choice>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>state=</valuePrefix>
+      <delimiter> OR </delimiter>
+      <default>1,0,2,3</default>
+    </input>
+    <input type="checkbox" token="state_type" searchWhenChanged="true">
+      <label>State Type</label>
+      <choice value="0">SOFT</choice>
+      <choice value="1">HARD</choice>
+      <choice value="*">ALL</choice>
+      <default>*</default>
+      <delimiter> </delimiter>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <chart>
+        <title>CPU Usage</title>
+        <search>
+          <query>index=centreon metric=* service_description IN (ESX-CPU,CPU,Cpu-Forwarding,Cpu-Routing) hostname=$hostname$ | timechart span=15m avg(value) by metric</query>
+          <earliest>$timepicker.earliest$</earliest>
+          <latest>$timepicker.latest$</latest>
+        </search>
+        <option name="charting.axisY.maximumNumber">100</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Memory Usage</title>
+        <search>
+          <query>index=centreon metric=* service_description IN (Memory,Esx-Memory,Memoire,"Memory Routing",Memory-Routing,Memory-Forwarding) hostname=$hostname$ | eval value=tostring(round(value/1073741824,2)) | timechart span=15m avg(value) by metric</query>
+          <earliest>$timepicker.earliest$</earliest>
+          <latest>$timepicker.latest$</latest>
+        </search>
+        <option name="charting.axisY.maximumNumber">16</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Disques Usage</title>
+        <search>
+          <query>index=centreon metric=* hostname=$hostname$ service_description=Dis*s | eval value=tostring(round(value/1073741824,2)) | timechart span=10m avg(value) by metric useother=f</query>
+          <earliest>$timepicker.earliest$</earliest>
+          <latest>$timepicker.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">in GB</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">collapsed</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="trellis.enabled">1</option>
+        <option name="trellis.scales.shared">0</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Ping</title>
+        <search>
+          <query>index=centreon metric=* service_description=Ping hostname=$hostname$ | timechart span=15m avg(value) by metric</query>
+          <earliest>$timepicker.earliest$</earliest>
+          <latest>$timepicker.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.axisTitleY2.visibility">collapsed</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="trellis.enabled">1</option>
+        <option name="trellis.size">small</option>
+        <option name="trellis.splitBy">metric</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Nombre Event par Statut de Service</title>
+        <search>
+          <query>index="centreon" category=1 element=24 hostname=$hostname$ service_description=* state_type=$state_type$ $state$ | eval state=case(state == 0, "OK", state == 1, "WARNING", state == 2, "CRITICAL", state == 3, "UNKNOWN") | eval state_type=case(state_type == 0, "SOFT", state_type == 1, "HARD") | eval state_type=case(state_type == 0, "SOFT", state_type == 1, "HARD") | chart count over state by service_description</query>
+          <earliest>$timepicker.earliest$</earliest>
+          <latest>$timepicker.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Bilan des notifications</title>
+        <search>
+          <query>index=centreon category=1 element=17 notification_contact!="" hostname=$hostname$ $state$  |  chart count over notification_contact by output</query>
+          <earliest>$timepicker.earliest$</earliest>
+          <latest>$timepicker.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.axisTitleY2.visibility">collapsed</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="trellis.enabled">1</option>
+      </chart>
+    </panel>
+  </row>
+</form>

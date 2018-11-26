@@ -1,0 +1,96 @@
+<form>
+  <label>Centreon - Predict Metric</label>
+  <fieldset submitButton="true" autoRun="true">
+    <input type="dropdown" token="hostname" searchWhenChanged="true">
+      <label>Select Hostname</label>
+      <fieldForLabel>hostname</fieldForLabel>
+      <fieldForValue>hostname</fieldForValue>
+      <search>
+        <query>index=centreon element=24 category=1 hostname=* service_description=* | dedup hostname | sort hostname</query>
+        <earliest>-15m@m</earliest>
+        <latest>now</latest>
+      </search>
+    </input>
+    <input type="dropdown" token="service_description" searchWhenChanged="true">
+      <label>Select Service</label>
+      <fieldForLabel>service_description</fieldForLabel>
+      <fieldForValue>service_description</fieldForValue>
+      <search>
+        <query>index=centreon metric=* hostname=$hostname$ | dedup service_description | table service_description</query>
+        <earliest>-60m@m</earliest>
+        <latest>now</latest>
+      </search>
+    </input>
+    <input type="dropdown" token="metric" searchWhenChanged="true">
+      <label>Select Metric</label>
+      <fieldForLabel>metric</fieldForLabel>
+      <fieldForValue>metric</fieldForValue>
+      <search>
+        <query>index=centreon metric=* hostname=$hostname$ service_description=$service_description$ | dedup metric | table metric</query>
+        <earliest>-60m@m</earliest>
+        <latest>now</latest>
+      </search>
+    </input>
+    <input type="dropdown" token="algorithm" searchWhenChanged="true">
+      <label>Select Algorithm</label>
+      <choice value="algorithm=LL">Local level</choice>
+      <choice value="algorithm=LLT">Local level trend</choice>
+      <choice value="algorithm=LLP">Seasonal local level</choice>
+      <choice value="algorithm=LLP5">Combines LLT and LLP</choice>
+    </input>
+    <input type="time" token="timepicker" searchWhenChanged="true">
+      <label>Date</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="span" searchWhenChanged="true">
+      <label>Select a span</label>
+      <choice value="span=1m">1m</choice>
+      <choice value="span=5m">5m</choice>
+      <choice value="span=10m">10m</choice>
+      <choice value="span=15m">15m</choice>
+      <default>span=5m</default>
+    </input>
+    <input type="dropdown" token="future_timespan" searchWhenChanged="true">
+      <label>Select a future_timespan</label>
+      <default>250</default>
+      <prefix>future_timespan=</prefix>
+      <choice value="250">250</choice>
+      <choice value="500">500</choice>
+      <choice value="1000">1000</choice>
+      <choice value="2000">2000</choice>
+      <choice value="5000">5000</choice>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <chart>
+        <title>Prediction Metric</title>
+        <search>
+          <query>index=centreon metric="$metric$" hostname=$hostname$ service_description="$service_description$" | timechart $span$ avg(value) by metric | predict "$metric$" $algorithm$ $future_timespan$</query>
+          <earliest>$timepicker.earliest$</earliest>
+          <latest>$timepicker.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Monitoring Graph</title>
+        <search>
+          <query>index=centreon metric="*" hostname=$hostname$ service_description="$service_description$" | timechart $span$ avg(value) by metric</query>
+          <earliest>$timepicker.earliest$</earliest>
+          <latest>$timepicker.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+  </row>
+</form>

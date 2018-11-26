@@ -1,0 +1,33 @@
+<form>
+  <label>Centreon - Reporting BAM</label>
+  <fieldset submitButton="true" autoRun="true">
+    <input type="time" token="timepicker" searchWhenChanged="true">
+      <label>Data</label>
+      <default>
+        <earliest>-15m</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <chart>
+        <search>
+          <query>index=centreon category=6 element=1 | stats avg(level_nominal) by ba_name.ba_name</query>
+          <earliest>$timepicker.earliest$</earliest>
+          <latest>$timepicker.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.axisTitleY2.visibility">collapsed</option>
+        <option name="charting.chart">radialGauge</option>
+        <option name="charting.chart.rangeValues">[0,25,75,100]</option>
+        <option name="charting.chart.style">minimal</option>
+        <option name="charting.gaugeColors">["0xd13b3b","0xf7912c","0x7e9f44"]</option>
+        <option name="charting.legend.placement">none</option>
+        <option name="trellis.enabled">1</option>
+        <option name="trellis.size">small</option>
+      </chart>
+    </panel>
+  </row>
+</form>

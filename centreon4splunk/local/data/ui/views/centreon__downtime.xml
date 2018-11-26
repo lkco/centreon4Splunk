@@ -1,0 +1,57 @@
+<form>
+  <label>Centreon - Downtime</label>
+  <fieldset submitButton="true">
+    <input type="dropdown" token="hostgroup">
+      <label>hostgroup</label>
+      <fieldForLabel>hostgroup</fieldForLabel>
+      <fieldForValue>hostgroup</fieldForValue>
+      <search>
+        <query>index=centreon element=24| top limit=250 "hostgroups{}.group_name" | rename "hostgroups{}.group_name"  AS hostgroup | table hostgroup</query>
+        <earliest>-15m</earliest>
+        <latest>now</latest>
+      </search>
+      <prefix>"hostgroups{}.group_name"=</prefix>
+      <choice value="*">ALL</choice>
+      <default>*</default>
+    </input>
+    <input type="text" token="hostname" searchWhenChanged="true">
+      <label>hostname</label>
+      <default>*</default>
+    </input>
+    <input type="text" token="service_description" searchWhenChanged="true">
+      <label>Service Description</label>
+      <default>*</default>
+    </input>
+    <input type="radio" token="type" searchWhenChanged="true">
+      <label>Type Downtime</label>
+      <choice value="2">Host</choice>
+      <choice value="1">Service</choice>
+      <choice value="*">ALL</choice>
+      <default>*</default>
+    </input>
+    <input type="time" token="timepicker" searchWhenChanged="true">
+      <label>Date</label>
+      <default>
+        <earliest>-60m@m</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <table>
+        <title>Resultats</title>
+        <search>
+          <query>index=centreon category=1 element=5 type=$type$ deletion_time=* $hostgroup$ | eval start_time=strftime(start_time, "%a %d %B %Y %H:%M") | eval end_time=strftime(end_time, "%a %d %B %Y %H:%M") | table hostname,service_description,start_time,end_time,author,comment_data</query>
+          <earliest>$timepicker.earliest$</earliest>
+          <latest>$timepicker.latest$</latest>
+        </search>
+        <option name="count">25</option>
+        <option name="drilldown">none</option>
+        <format type="color" field="state">
+          <colorPalette type="map">{"OK":#65A637,"WARNING":#F7BC38,"CRITICAL":#D93F3C,"UNKNOWN":#555555}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+</form>
