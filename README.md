@@ -12,7 +12,7 @@
 mkdir -p  /var/log/centreon4splunk && chown -R centreon-broker:centreon-broker /var/log/centreon4splunk
 ```
 * Connect to Centreon Web UI
-* Configure the new output into Centreon Web interface in "Configuration > Pollers > Broker configuration > Central Broker". 
+* Configure the new output in "Configuration > Pollers > Broker configuration > Central Broker". 
 * In Output tab select "Generic – Stream connector" and click "Add"
 * Define the name of this output and the path to the Lua connector : /usr/share/centreon-broker/centreon4splunk.lua
 * Click Save and go to generate the configuration and restart cbd daemon.
