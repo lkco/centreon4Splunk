@@ -11,6 +11,7 @@
 ```
 mkdir -p  /var/log/centreon4splunk && chown -R centreon-broker:centreon-broker /var/log/centreon4splunk
 ```
+* Connect to Centreon Web UI
 * Configure the new output into Centreon Web interface in "Configuration > Pollers > Broker configuration > Central Broker". 
 * In Output tab select "Generic – Stream connector" and click "Add"
 * Define the name of this output and the path to the Lua connector : /usr/share/centreon-broker/centreon4splunk.lua
@@ -18,8 +19,8 @@ mkdir -p  /var/log/centreon4splunk && chown -R centreon-broker:centreon-broker /
 
 
 ## Use Splunk Universal Forwarder
-* Install and configure Universal Forwarder Splunk
-*  Configure new sourcetype
+* On your Centreon server, install and configure Universal Forwarder Splunk
+* On your Splunk, configure a new sourcetype
 ```
 [centreon4splunk]
 DATETIME_CONFIG =
@@ -31,6 +32,7 @@ disabled = false
 pulldown_type = true
 description = centreon4splunk
 ```
+* Create a new index calling : centreon
 * Add an input to monitore /var/log/centreon4splunk/centreon4splunk.log and use centreon4splunk sourcetype
-* On your indexer, create a new index calling : centreon
-* Deploy apps centreon4splunk in your Splunk server 
+* Deploy app centreon4splunk in your Splunk server on /opt/splunk/etc/apps/
+* Go to : https://splunkserver:8000/centreon4splunk/Infos
