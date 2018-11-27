@@ -72,7 +72,7 @@
   <row>
     <panel>
       <chart>
-        <title>Disques Usage</title>
+        <title>Disk Usage</title>
         <search>
           <query>index=centreon metric=* hostname=$hostname$ service_description=Dis*s | eval value=tostring(round(value/1073741824,2)) | timechart span=10m avg(value) by metric useother=f</query>
           <earliest>$timepicker.earliest$</earliest>
@@ -113,7 +113,7 @@
   <row>
     <panel>
       <chart>
-        <title>Nombre Event par Statut de Service</title>
+        <title>Number Event by Service Status</title>
         <search>
           <query>index="centreon" category=1 element=24 hostname=$hostname$ service_description=* state_type=$state_type$ $state$ | eval state=case(state == 0, "OK", state == 1, "WARNING", state == 2, "CRITICAL", state == 3, "UNKNOWN") | eval state_type=case(state_type == 0, "SOFT", state_type == 1, "HARD") | eval state_type=case(state_type == 0, "SOFT", state_type == 1, "HARD") | chart count over state by service_description</query>
           <earliest>$timepicker.earliest$</earliest>
@@ -125,7 +125,7 @@
     </panel>
     <panel>
       <chart>
-        <title>Bilan des notifications</title>
+        <title>Summary of notifications</title>
         <search>
           <query>index=centreon category=1 element=17 notification_contact!="" hostname=$hostname$ $state$  |  chart count over notification_contact by output</query>
           <earliest>$timepicker.earliest$</earliest>

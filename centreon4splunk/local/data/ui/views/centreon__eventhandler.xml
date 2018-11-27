@@ -45,7 +45,7 @@
   <row>
     <panel>
       <table>
-        <title>Resultats</title>
+        <title>Results</title>
         <search>
           <query>index="centreon" category=1 element=6 hostname=$hostname$ state_type=$state_type$ $state$ $service_description$ | eval state=case(state == 0, "OK", state == 1, "WARNING", state == 2, "CRITICAL", state == 3, "UNKNOWN") | dedup _time,hostname,service_description,state,command_line | table _time,hostname,service_description,state,command_line $output$</query>
           <earliest>$timepicker.earliest$</earliest>

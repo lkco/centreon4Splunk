@@ -2,7 +2,7 @@
   <label>Centreon - Reporting BAM</label>
   <fieldset submitButton="true" autoRun="true">
     <input type="time" token="timepicker" searchWhenChanged="true">
-      <label>Data</label>
+      <label>Date</label>
       <default>
         <earliest>-15m</earliest>
         <latest>now</latest>

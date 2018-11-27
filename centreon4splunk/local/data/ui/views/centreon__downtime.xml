@@ -40,7 +40,7 @@
   <row>
     <panel>
       <table>
-        <title>Resultats</title>
+        <title>Results</title>
         <search>
           <query>index=centreon category=1 element=5 type=$type$ deletion_time=* $hostgroup$ | eval start_time=strftime(start_time, "%a %d %B %Y %H:%M") | eval end_time=strftime(end_time, "%a %d %B %Y %H:%M") | table hostname,service_description,start_time,end_time,author,comment_data</query>
           <earliest>$timepicker.earliest$</earliest>

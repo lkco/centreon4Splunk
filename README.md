@@ -1,6 +1,6 @@
 # centreon4splunk
 ## Introduction
-centreon4splunk is a Splunk add-on for Centreon and provides several dashboard
+centreon4splunk is a Splunk App for Centreon and provides several dashboard
 * Host Status
 * Service Status
 * Downtime
@@ -9,7 +9,7 @@ centreon4splunk is a Splunk add-on for Centreon and provides several dashboard
 * Metric (perfdata)
 * BA Status
 
-This add-on is working with Centreon >= 2.8.24 or 18.10 and use the stream connector feature to generate log.  
+This app is working with Centreon >= 2.8.24 or 18.10 and use the stream connector feature to generate log.  
 
 ## Detail
 * Use stream connector to generate a log file "/var/log/centreon4splunk/centreon4splunk.log"
