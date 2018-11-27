@@ -33,6 +33,6 @@ pulldown_type = true
 description = centreon4splunk
 ```
 * Create a new index calling : centreon
-* Add an input to monitore /var/log/centreon4splunk/centreon4splunk.log and use centreon4splunk sourcetype
+* Add an input to monitore /var/log/centreon4splunk/centreon4splunk.log, use centreon4splunk sourcetype and select centreon index
 * Deploy app centreon4splunk in your Splunk server on /opt/splunk/etc/apps/
 * Go to : https://splunkserver:8000/centreon4splunk/Infos
