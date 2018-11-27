@@ -1,11 +1,25 @@
-# centreon4Splunk
-## Features
+# centreon4splunk
+## Introduction
+centreon4splunk is a Splunk add-on for Centreon and provides several dashboard
+* Host Status
+* Service Status
+* Downtime
+* EventHandler
+* Log Entry
+* Metric (perfdata)
+* BA Status
+
+This add-on is working with Centreon >= 2.8.24 or 18.10 and use the stream connector feature to generate log.  
+
+## Detail
 * Use stream connector to generate a log file "/var/log/centreon4splunk/centreon4splunk.log"
 * Use Universal Forwarder to monitor this log
-* All data are sending into centreon index
+* Data must be forwarded into the index calling "centreon"
 * Install and use centreon4splunk app to manipulate data
 
-## Use stream connector feature into Centreon
+## Download / Install
+
+### Configure stream connector
 * Copy lua script lua/centreon4splunk.lua to "/usr/share/centreon-broker/centreon4splunk.lua" on your Centreon server
 * Run :
 ```
@@ -18,7 +32,7 @@ mkdir -p  /var/log/centreon4splunk && chown -R centreon-broker:centreon-broker /
 * Click Save and go to generate the configuration and restart cbd daemon.
 
 
-## Use Splunk Universal Forwarder
+### Configure Splunk Universal Forwarder
 * On your Centreon server, install and configure Universal Forwarder Splunk
 * On your Splunk, configure a new sourcetype
 ```
