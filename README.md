@@ -59,7 +59,7 @@ description = centreon4splunk
 * Deploy app centreon4splunk in your Splunk server on /opt/splunk/etc/apps/
 * Restart Splunk and go to : https://splunkserver:8000/centreon4splunk/Infos
 
-### More optimization
+### Advanced setting
 /var/log/centreon4splunk/centreon4splunk.log file can be really be. 
 I advise you to configure logrotate. For example,
 ```
