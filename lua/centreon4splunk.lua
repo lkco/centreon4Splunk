@@ -1,3 +1,4 @@
+#!/usr/bin/lua
 --[[
  Copyright (C) 2018 Olivier LI-KIANG-CHEONG <lkco>
 
@@ -37,13 +38,13 @@ function write(d)
         d["service_description"]   = broker_cache:get_service_description(d.host_id,d.service_id)
       end
     end
+
     data["log_time"]            = d.entry_time
     broker_log:info(3, broker.json_encode(d))
     return true
-  end
 
   -- BA Status
-  if ( d.category == 6 and d.element == 1 ) then
+  elseif ( d.category == 6 and d.element == 1 ) then
     data["element"]               = d.element
     data["category"]              = d.category
     data["state"]                 = d.state
@@ -52,10 +53,9 @@ function write(d)
     data["ba_name"]               = broker_cache:get_ba(d.ba_id)
     broker_log:info(3, broker.json_encode(data))
     return true
-  end
 
-  -- Event handler
-  if ( d.category == 1 and d.element == 6 ) then
+  -- Event handler 
+  elseif ( d.category == 1 and d.element == 6 ) then
     if d.host_id then
       data["hostname"]              = broker_cache:get_hostname(d.host_id)
       if d.service_id then
@@ -68,20 +68,18 @@ function write(d)
     data["command_args"]          = d.command_args
     data["command_line"]          = d.command_line
     data["element"]               = d.element
-    -- Replace blackslash by underscore
     local output
+    -- Replace blackslash by underscore
     output = string.gsub(d.output,'\\',"_")
     data["output"]                = output
-
     data["state"]                 = d.state
     data["state_type"]            = d.state_type
     data["log_time"]              = d.start_time
     broker_log:info(3, broker.json_encode(data))
     return true
-  end
 
   -- Host Status
-  if (d.category == 1 and d.element == 14 ) then
+  elseif (d.category == 1 and d.element == 14 ) then 
     data["hostname"]              = broker_cache:get_hostname(d.host_id)
     data["hostgroups"]            = broker_cache:get_hostgroups(d.host_id)
     data["acknowledged"]          = d.acknowledged
@@ -91,7 +89,9 @@ function write(d)
     data["element"]               = d.element
     data["event_handler"]         = d.event_handler
     data["event_handler_enabled"] = d.event_handler_enabled
+    data["execution_time"]        = d.execution_time
     local output
+    -- Replace blackslash by underscore
     output = string.gsub(d.output,'\\',"_")
     data["output"]                = output
     data["state"]                 = d.state
@@ -100,10 +100,9 @@ function write(d)
     broker_log:info(3, broker.json_encode(data))
     return true
 
-  end
 
   -- Service Status
-  if ( d.category == 1 and d.element == 24 ) then
+  elseif ( d.category == 1 and d.element == 24 ) then
     data["hostname"]              = broker_cache:get_hostname(d.host_id)
     data["hostgroups"]            = broker_cache:get_hostgroups(d.host_id)
     data["service_description"]   = broker_cache:get_service_description(d.host_id,d.service_id)
@@ -113,9 +112,11 @@ function write(d)
     data["check_command"]         = d.check_command
     data["check_period"]          = d.check_period
     data["element"]               = d.element
-    data["event_handler"]         = d.event_handler
+    data["event_handler"]         = d.event_handler 
     data["event_handler_enabled"] = d.event_handler_enabled
+    data["execution_time"]        = d.execution_time
     local output
+    -- Replace blackslash by underscore
     output = string.gsub(d.output,'\\',"_")
     data["output"]                = output
     data["state"]                 = d.state
@@ -123,10 +124,9 @@ function write(d)
     data["log_time"]              = d.last_check
     broker_log:info(3, broker.json_encode(data))
     return true
-  end
 
   -- Log Entry
-  if ( d.category == 1 and d.element == 17 ) then
+  elseif ( d.category == 1 and d.element == 17 ) then
     if d.host_id then
       data["hostname"]              = broker_cache:get_hostname(d.host_id)
       data["hostgroups"]            = broker_cache:get_hostgroups(d.host_id)
@@ -136,28 +136,27 @@ function write(d)
     end
     data["category"]              = d.category
     data["element"]               = d.element
-
-    -- Replace blackslash by underscore
     local output
+    -- Replace blackslash by underscore
     output = string.gsub(d.output,'\\',"_")
-
     data["output"]                = output
     data["state"]                 = d.status
     data["retry"]                 = d.retry
     data["instance_name"]         = d.instance_name
     data["notification_contact"]  = d.notification_contact
+    data["notification_cmd"]      = d.notification_cmd
+    data["instance_name"]         = d.instance_name
+    
     data["log_time"]              = d.ctime
-
+    
     broker_log:info(3, broker.json_encode(data))
     return true
-  end
 
   -- Metric
-  if (d.category == 3 and d.element == 1) then
-    -- Replace blackslash by underscore
+  elseif (d.category == 3 and d.element == 1) then
     local name
+    -- Replace blackslash by underscore
     name = string.gsub(d.name,'\\',"_")
-
     data["hostname"]              = broker_cache:get_hostname(d.host_id)
     data["service_description"]   = broker_cache:get_service_description(d.host_id,d.service_id)
     data["metric"]                = name
@@ -166,8 +165,7 @@ function write(d)
     broker_log:info(3, broker.json_encode(data))
     return true
   end
-
+  
   return true
 
 end
-
