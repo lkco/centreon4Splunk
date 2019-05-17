@@ -1,7 +1,15 @@
-<nav search_view="search" color="#65A637">
-  <view name="search" default='true' />
-  <view name="datasets" />
-  <view name="reports" />
-  <view name="alerts" />
-  <view name="dashboards" />
+<nav color="#009FDF">
+    <view name="search" />
+    <view name="centreon__host_performance" default='true' />
+    <view name="centreon__predict_metric"/>
+    <collection label="Reports">
+        <saved source="all" match="centreon"/>
+        <divider />
+    </collection>
+    <collection label="Dashboard">
+        <view source="all" match="centreon"/>
+        <divider />
+    </collection>
+    <view name="Infos" />
 </nav>
+
