@@ -44,7 +44,7 @@
       <chart>
         <title>CPU Usage</title>
         <search>
-          <query>index=centreon metric=* service_description IN (ESX-CPU,CPU,Cpu-Forwarding,Cpu-Routing) hostname=$hostname$ | timechart span=15m avg(value) by metric</query>
+          <query>index=centreon metric=* service_description IN (ESX-CPU,CPU,Cpu-Forwarding,Cpu-Routing) hostname=$hostname$ | timechart bins=250 avg(value) by metric</query>
           <earliest>$timepicker.earliest$</earliest>
           <latest>$timepicker.latest$</latest>
         </search>
@@ -58,7 +58,7 @@
       <chart>
         <title>Memory Usage</title>
         <search>
-          <query>index=centreon metric=* service_description IN (Memory,Esx-Memory,Memoire,"Memory Routing",Memory-Routing,Memory-Forwarding) hostname=$hostname$ | eval value=tostring(round(value/1073741824,2)) | timechart span=15m avg(value) by metric</query>
+          <query>index=centreon metric=* service_description IN (Memory,Esx-Memory,Memoire,"Memory Routing",Memory-Routing,Memory-Forwarding) hostname=$hostname$ | eval value=tostring(round(value/1073741824,2)) | timechart bins=250 avg(value) by metric</query>
           <earliest>$timepicker.earliest$</earliest>
           <latest>$timepicker.latest$</latest>
         </search>
@@ -94,7 +94,7 @@
       <chart>
         <title>Ping</title>
         <search>
-          <query>index=centreon metric=* service_description=Ping hostname=$hostname$ | timechart span=15m avg(value) by metric</query>
+          <query>index=centreon metric=* service_description=Ping hostname=$hostname$ | timechart bins=250 avg(value) by metric</query>
           <earliest>$timepicker.earliest$</earliest>
           <latest>$timepicker.latest$</latest>
         </search>
