@@ -76,5 +76,15 @@ I advise you to configure logrotate. For example,
 }
 
 ```
+### Use custom alert actions for Centreon Service Submit Result
+
+notify_centreon action use Centreon API to submit passive check. You must restart Splunk to enable configurations.
+* Copy $SPLUNK_HOME/etc/apps/centreon4splunk/default/alert_actions.conf to $SPLUNK_HOME/etc/apps/centreon4splunk/local directory
+* Edit local/alert_actions.conf and change attribut value
+* param.base_url : URL centreon
+* param.login : A user Centreon with "Reach API Configuration" privilege
+* param.password : The login password
+
+Troubleshooting : See $SPLUNK_HOME/var/log/splunk/notify_centreon.log 
 
 
