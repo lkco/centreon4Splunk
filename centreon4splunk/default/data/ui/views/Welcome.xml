@@ -1,0 +1,39 @@
+<form>
+ <label>Welcome</label>
+ <description></description>
+ <row>
+   <panel>
+     <html>
+<h1>Welcome to the Centreon For Splunk</h1>
+
+<h2><b>Some query to manipulate Centreon data</b></h2>
+<ul>
+ <li>Host Status : index=centreon category=1 element=14</li>
+ <li>Service Status : index=centreon category=1 element=24</li>
+ <li>Downtime : index=centreon category=1 element=5 </li>
+ <li>EventHandler : index=centreon category=1 element=6</li>
+ <li>Log Entry : index=centreon category=1 element=17</li> 
+ <li>Metric : index=centreon metric=*</li> 
+ <li>BA Status : index=centreon category=6 element=1</li>
+</ul>
+<br />
+<h2><b>Use custom alert actions for Centreon Service Submit Result</b></h2>
+<p>notify_centreon action use Centreon API to submit passive check. You must restart Splunk to enable configurations.</p>
+<ul>
+ <li>Copy $SPLUNK_HOME/etc/apps/centreon4splunk/default/alert_actions.conf to $SPLUNK_HOME/etc/apps/centreon4splunk/local directory</li>
+ <li>Edit local/alert_actions.conf and change attribut value</li>
+ <li>param.base_url : URL centreon</li>
+ <li>param.login : A user Centreon with "Reach API Configuration" privilege</li>
+ <li>param.password : The login password</li>
+</ul>
+Troubleshooting : See $SPLUNK_HOME/var/log/splunk/notify_centreon.log
+<br />
+<br />
+<p>
+<b>Learn more about the Centreon For Splunk app <a href="https://github.com/lkco/centreon4Splunk">here</a></b>.
+</p>
+     </html>
+   </panel>
+ </row>
+</form>
+

@@ -26,7 +26,7 @@
       <fieldForLabel>metric</fieldForLabel>
       <fieldForValue>metric</fieldForValue>
       <search>
-        <query>index=centreon metric=* hostname=$hostname$ service_description=$service_description$ | dedup metric | table metric</query>
+        <query>index=centreon metric=* hostname=$hostname$ service_description="$service_description$" | dedup metric | table metric</query>
         <earliest>-60m@m</earliest>
         <latest>now</latest>
       </search>

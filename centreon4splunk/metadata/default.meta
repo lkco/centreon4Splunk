@@ -27,9 +27,28 @@ export = system
 [lookups]
 export = system
 
+### Saved searches
+#
+[savedsearches]
+export = system
+
+
+### Commands
+
+[commands]
+export = system
+
+
+### workflow
+[workflow_actions]
+export = system
+
 
 ### VIEWSTATES: even normal users should be able to create shared viewstates
 
 [viewstates]
 access = read : [ * ], write : [ * ]
+export = system
+
+[alert_actions/scripts]
 export = system

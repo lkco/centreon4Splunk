@@ -1,0 +1,46 @@
+<form>
+  <label>Centreon - Monitoring Status Service</label>
+  <fieldset submitButton="true" autoRun="true">
+    <input type="text" token="hostname" searchWhenChanged="true">
+      <label>hostname</label>
+      <default>*</default>
+    </input>
+    <input type="text" token="service_description" searchWhenChanged="true">
+      <label>Service Description</label>
+      <default>*</default>
+    </input>
+    <input type="checkbox" token="state" searchWhenChanged="true">
+      <label>State</label>
+      <choice value="0">OK</choice>
+      <choice value="1">WARNING</choice>
+      <choice value="2">CRITICAL</choice>
+      <choice value="3">UNKNOWN</choice>
+      <default>1,0,2,3</default>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>state=</valuePrefix>
+      <delimiter> OR </delimiter>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <table>
+        <title>Results</title>
+        <search>
+          <query>index="centreon" category=1 element=24 hostname=$hostname$ service_description=$service_description$ | dedup 1 hostname service_description sortby -_time | search $state$ | eval state=case(state == 0, "OK", state == 1, "WARNING", state == 2, "CRITICAL", state == 3, "UNKNOWN") | eval state_type=case(state_type == 0, "SOFT", state_type == 1, "HARD") | rename _time AS last_check
+     | fieldformat last_check = strftime(last_check, "%d/%m/%Y %T") | table last_check,hostname,service_description,output,state state_type</query>
+          <earliest>-60m@m</earliest>
+          <latest>now</latest>
+        </search>
+        <option name="count">50</option>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">true</option>
+        <option name="wrap">true</option>
+        <format type="color" field="state">
+          <colorPalette type="map">{"OK":#65A637,"WARNING":#F7BC38,"CRITICAL":#D93F3C,"UNKNOWN":#555555}</colorPalette>
+        </format>
+      </table>
+    </panel>
+  </row>
+</form>

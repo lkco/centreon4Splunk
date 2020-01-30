@@ -10,6 +10,6 @@
         <view source="all" match="centreon"/>
         <divider />
     </collection>
-    <view name="Infos" />
+    <view name="Welcome" />
 </nav>
 

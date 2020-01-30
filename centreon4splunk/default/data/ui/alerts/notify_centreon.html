@@ -1,0 +1,61 @@
+<form class="form-horizontal form-complex">
+    <div class="control-group">
+        <label class="control-label" for="notify_centreon_host">Host</label>
+
+        <div class="controls">
+            <input type="text" name="action.notify_centreon.param.host" id="notify_centreon_host" />
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+              The name of a Host. Case sensitive
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="notify_centreon_service">Service</label>
+
+        <div class="controls">
+            <input type="text" name="action.notify_centreon.param.service" id="notify_centreon_service" />
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+              The name of a service. Case sensitive
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="notify_centreon_message">Message</label>
+
+        <div class="controls">
+            <textarea name="action.notify_centreon.param.message" id="notify_centreon_message" />
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                The message service.
+                Include tokens to insert text based on search results.
+                <a href="{{SPLUNKWEB_URL_PREFIX}}/help?location=learnmore.alert.action.tokens" target="_blank"
+                   title="Splunk help">Learn More <i class="icon-external"></i></a>
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="notify_centreon_status">Status</label>
+        <div class="controls">
+            <select id="notify_centreon_status" name="action.notify_centreon.param.status">
+                <option value="2">Critical</option>
+                <option value="1">Warning</option>
+                <option value="0">Ok</option>
+                <option value="3">Unknown</option>
+                <option value="99">Custom</option>
+            </select>
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                For Custom and define a value with a token using Custom Value
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="notify_centreon_status_custom">Custom Value</label>
+        <div class="controls">
+            <input type="text" name="action.notify_centreon.param.status_custom" id="notify_centreon_status_custom" />
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+              Use token for example, $result.fieldname$. Value code "0" is "OK", "1" is "Warning", "2" is "Critical", "3" is "Unknown"
+              <a href="{{SPLUNKWEB_URL_PREFIX}}/help?location=learnmore.alert.action.tokens" target="_blank"
+                 title="Splunk help">Learn More <i class="icon-external"></i></a>
+            </span>
+        </div>
+    </div>
+</form>
