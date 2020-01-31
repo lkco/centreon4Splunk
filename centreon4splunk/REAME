@@ -1,0 +1,14 @@
+Version : 1.4
+Centreon4splunk is a Splunk App for Centreon and provides several dashboard
+* Host Status
+* Service Status
+* Downtime
+* EventHandler
+* Log Entry
+* Metric (perfdata)
+* BA Status
+
+Alert action :
+notify_centreon : send passive check to centreon using API REST
+
+This app is working with Centreon >= 2.8.24 or 18.10 and use the stream connector feature to generate log.
