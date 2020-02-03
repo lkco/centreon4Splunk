@@ -65,10 +65,11 @@ def send_centreon(settings):
     message = settings.get('message')
     
     valid_status_code = "0","1","2","3"
-    if status_code == "99" and settings.get('status_custom') in valid_status_code:
-        status_code = settings.get('status_custom')
-    else:
-        status_code = "3"
+    if status_code == "99":
+        if settings.get('status_custom') in valid_status_code:
+            status_code = settings.get('status_custom')
+        else:
+            status_code = "3"
 
     auth_token = get_token(base_url,login,password)
     headers={
