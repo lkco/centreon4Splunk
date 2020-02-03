@@ -85,6 +85,7 @@ First, configure authentication for API/Rest
 * param.base_url : URL centreon
 * param.login : A user Centreon with "Reach API Configuration" privilege
 * param.password : The login password
+![User Centreon](https://raw.githubusercontent.com/lkco/centreon4Splunk/master/images/centreon_user.png "User Centreon")
 
 In Centreon, 
 * Create new service using "generic-passive-service-custom" template. 
@@ -99,6 +100,8 @@ In Splunk,
 * Use trigger action "Centreon Service Submit Result"
 * Set the host and service name
 * Select the status (OK, WARNING, CRITICAL or UNKNOWN)
+
+![Splunk trigger](https://raw.githubusercontent.com/lkco/centreon4Splunk/master/images/splunk_trigger.png "Splunk trigger")
 
 If you choose Custom status, you can send a custom field. For example $result.fieldname$
 
