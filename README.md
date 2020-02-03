@@ -91,6 +91,8 @@ In Centreon,
 * Chose a name and attach it to a host.
 * Reload the poller to apply configuration.
 
+![Service passive](https://raw.githubusercontent.com/lkco/centreon4Splunk/master/images/centreon_service_passive.png "Service passive")
+
 In Splunk, 
 * Run the search and click Save As > Alert
 * Set a title and configure the schedule 
