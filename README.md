@@ -105,6 +105,8 @@ In Splunk,
 
 If you choose Custom status, you can send a custom field. For example $result.fieldname$
 
-Troubleshooting : See $SPLUNK_HOME/var/log/splunk/notify_centreon.log 
+Troubleshooting : 
+* See $SPLUNK_HOME/var/log/splunk/notify_centreon.log 
+* Run manually : $SPLUNK_HOME/bin/splunk cmd bin/python etc/apps/entreon4splunk/bin/notify_centreon.py --execute < /tmp/input
 
 
