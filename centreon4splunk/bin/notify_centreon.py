@@ -28,7 +28,7 @@ def log_msg(level):
     logger.propagate = False
     logger.setLevel(level)
     file_handler = logging.handlers.RotatingFileHandler(os.environ['SPLUNK_HOME'] + '/var/log/splunk/notify_centreon.log',maxBytes=104857600,backupCount=5)
-    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(sid)s %(message)s')
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
     return logger
@@ -62,8 +62,10 @@ def send_centreon(settings):
     host = settings.get('host')
     service = settings.get('service')
     status_code = settings.get('status')
-    message = settings.get('message')
-    
+    listmessage = settings.get('message').split('|')
+    message = listmessage[0]
+    perfdata = listmessage[1]
+
     valid_status_code = "0","1","2","3"
     if status_code == "99":
         if settings.get('status_custom') in valid_status_code:
@@ -80,24 +82,26 @@ def send_centreon(settings):
     data = {
         "results": [{
             "output": get_status(status_code) + ': ' + message,
+            "perfdata": perfdata,
             "updatetime": timenow,
             "status": status_code,
             "service": service,
             "host": host
         }]
     }
-        
+
     request = requests.post(
         base_url + '/api/index.php?action=submit&object=centreon_submit_results',
         headers = headers,
         verify = False,
         data = json.dumps(data)
     )
-    logger.info('Sending data: ' + format(json.dumps(data)))
+    global d
+    logger.info('Sending data: ' + format(json.dumps(data)),extra=d)
     request.raise_for_status()
     if 200 <= request.status_code < 300:
         #print("DEBUG receiver endpoint responded with HTTP status=%d" % request.status_code, file=sys.stderr)
-        logger.info('Response: ' + format(json.dumps(request.json())))
+        logger.info('Response: ' + format(json.dumps(request.json())),extra=d)
         return True
     else:
         print("ERROR receiver endpoint responded with HTTP status=%d" % request.status_code, file=sys.stderr)
@@ -106,7 +110,7 @@ def send_centreon(settings):
     data = request.json()
 
 global logger
-logger = log_msg(logging.INFO) 
+logger = log_msg(logging.INFO)
 if __name__ == "__main__":
     if len(sys.argv) < 2 or sys.argv[1] != "--execute":
         print("FATAL Unsupported execution mode (expected --execute flag)", file=sys.stderr)
@@ -114,10 +118,11 @@ if __name__ == "__main__":
     else:
         payload = json.loads(sys.stdin.read())
         settings = payload.get('configuration')
-        #logger.info(format(json.dumps(payload)))
-        logger.info('Configuration data: ' + format(json.dumps(settings)))
+        d = {"sid": payload.get('sid')}
+        logger.info( 'Payload: ' + format(json.dumps(payload)),extra=d)
+        logger.info('Retrieved data: ' + format(json.dumps(settings)),extra=d)
         if not send_centreon(settings):
             logger.info("ERROR Unable to contact centreon endpoint")
             sys.exit(2)
         else:
-            logger.info("DEBUG centreon endpoint responded with OK status")
+            logger.info("DEBUG centreon endpoint responded with OK status",extra=d)
